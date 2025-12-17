@@ -123,7 +123,7 @@ README.md（必須項目）
 [JavaTraining-Week4](https://github.com/Kohei-mana/JavaTraining-Week4.git)
 
 課題提出方法：
-[課題提出方法]()
+[課題提出方法](https://github.com/Kohei-mana/JavaTraining-Week4/blob/main/%E6%8F%90%E5%87%BA%E6%89%8B%E9%A0%86%E6%9B%B8.md)
 
 ⸻
 
