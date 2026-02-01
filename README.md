@@ -1,50 +1,85 @@
-# JavaTraining-Week4
+# JavaTraining-Week5
 
-## 概要
-Spring Boot を用いて、簡単な REST API（/hello と /api/tasks）を実装した課題の提出物である。
-Java および Spring Boot は学習を始めたばかりの状態で取り組んだ。
+## プロジェクト概要
+Spring Boot と Spring Data JPA を用いて，タスク（id・title・completed）を管理する REST API を作成した．
+H2 Database によるデータ永続化，入力バリデーション，例外ハンドリングを実装している．
 
-## 開発環境
-- JDK: 21.0.9 (Java SE 21 LTS)
-- Spring Boot: 3.5.10-SNAPSHOT
-- ビルドツール: Gradle (./gradlew, Windows は gradlew.bat)
-- IDE: IntelliJ IDEA Community (日本語版)
+---
 
-## セットアップ手順
-1. 本リポジトリを clone する。
-2. プロジェクトルート（JavaTraining-Week4）で次のコマンドを実行する。
-   - Windows:
-       gradlew.bat bootRun
-   - Mac / Linux:
-       ./gradlew bootRun
-3. Maven を利用する場合は、次のコマンドでも起動できる。
-   - ./mvnw spring-boot:run
+## 環境構築手順（DB設定を含む）
 
-## 動作確認手順
+### 動作環境
+- OS：Windows 11
+- Java：21.0.9 (LTS)
+- ビルドツール：Gradle
+- フレームワーク：Spring Boot 3.x
+- DB：H2 Database（インメモリ）
 
-1. アプリケーション起動確認
-   - ブラウザで http://localhost:8080/ にアクセスし、エラーが出ていないことを確認する。
-   - 起動ログに「Tomcat started on port 8080」「Started HellospringApplication」が出ていることを確認する。
+### DB設定（application.yml）
+src/main/resources/application.yml に以下を設定している．
 
-2. Hello API
-   - ブラウザまたは curl で次の URL にアクセスする。
-       http://localhost:8080/hello
-   - レスポンスとして文字列 "Hello, Spring Boot!" が返ってくることを確認する。
+spring:
+  datasource:
+    url: jdbc:h2:mem:tasks;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
 
-3. Task API（正常系）
-   - 一覧取得:
-       curl http://localhost:8080/api/tasks
-   - タスク作成:
-       curl -X POST -H "Content-Type: application/json" -d "{\"title\":\"read book\"}" http://localhost:8080/api/tasks
-   - 再度一覧を取得して、追加したタスクが含まれていることを確認する。
+---
 
-4. Task API（バリデーションエラー）
-   - 空文字タイトルで POST する。
-       curl -X POST -H "Content-Type: application/json" -d "{\"title\":\"\"}" http://localhost:8080/api/tasks
-   - HTTP 400 Bad Request が返ることを確認する。
+## 実行・確認手順（curl例）
 
+### アプリ起動
+.\gradlew.bat bootRun
 
-## エラーが出た場合の対処（自分が踏んだもの）
+### API確認
+$base = "http://localhost:8080/api/tasks"
 
-- 最初、Gradle の Java toolchain が JDK 17 を探して起動に失敗したが、IntelliJ の Project SDK と Gradle JVM を JDK 21 に設定することで解決した。
-- PowerShell で curl 実行時にセキュリティ警告が出たため、推奨どおり確認して Y を選択するか、Invoke-RestMethod(irm) を使用することで回避した。
+GET:
+curl.exe -i $base
+
+POST:
+{"title":"買い物"}
+
+PUT:
+{"title":"買い物（更新）","completed":true}
+
+DELETE:
+curl.exe -i -X DELETE "$base/1"
+
+---
+
+## 例外ハンドリングの動作例
+
+### 400 Bad Request（バリデーションエラー）
+{"title":""}
+
+レスポンス例：
+{"details":{"title":"タイトルを入力してください"},"error":"Validation failed"}
+
+---
+
+### 404 Not Found（存在しないID）
+curl.exe -i -X DELETE "$base/9999"
+
+レスポンス例：
+{"error":"Task not found"}
+
+---
+
+### 確認事項
+- CRUD が正常動作する
+- H2 にデータが永続化される
+- Validation エラー時に 400
+- 不正 ID 指定時に 404
+
+以上を確認済みである．
+'@ | Set-Content README.md -Encoding UTF8
