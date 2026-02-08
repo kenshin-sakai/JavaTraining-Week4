@@ -6,11 +6,16 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@RestControllerAdvice
+
+@Order(Ordered.LOWEST_PRECEDENCE)
+@RestControllerAdvice(annotations = RestController.class)
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(TaskNotFoundException.class)

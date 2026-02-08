@@ -1,85 +1,49 @@
-# JavaTraining-Week5
+# JavaTraining Week6 - TaskApp（Thymeleaf）
 
-## プロジェクト概要
-Spring Boot と Spring Data JPA を用いて，タスク（id・title・completed）を管理する REST API を作成した．
-H2 Database によるデータ永続化，入力バリデーション，例外ハンドリングを実装している．
+## 目的
+Spring MVC（Controller / Service / Repository）と Thymeleaf を用いて、タスク管理アプリにWeb画面（CRUD）を追加する。
+フォーム入力のバリデーション表示、PRGパターン（Post → Redirect → Get）、フラッシュメッセージ、共通レイアウト化を体験する。
 
----
+## 機能概要
+- タスク一覧表示（/tasks）
+- タスク新規作成（/tasks/new → POST /tasks）
+- タスク編集（/tasks/{id}/edit → POST /tasks/{id}）
+- タスク削除（POST /tasks/{id}/delete）
+- （任意）完了/未完了の切り替え（POST /tasks/{id}/toggle）
 
-## 環境構築手順（DB設定を含む）
+## 起動手順
+### 前提
+- Java 21（JDK 21）
+- Windows 11 / PowerShell
 
-### 動作環境
-- OS：Windows 11
-- Java：21.0.9 (LTS)
-- ビルドツール：Gradle
-- フレームワーク：Spring Boot 3.x
-- DB：H2 Database（インメモリ）
+### 起動
+```powershell
+cd C:\Users\10xja\Desktop\JavaTraining-Week4
+```
 
-### DB設定（application.yml）
-src/main/resources/application.yml に以下を設定している．
+## 起動後のアクセス
+起動後、ブラウザで http://localhost:8080/tasks にアクセスする。
 
-spring:
-  datasource:
-    url: jdbc:h2:mem:tasks;DB_CLOSE_DELAY=-1
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
+## 画面URL一覧
+- 一覧：GET /tasks
+- 新規作成フォーム：GET /tasks/new
+- 新規作成：POST /tasks
+- 編集フォーム：GET /tasks/{id}/edit
+- 更新：POST /tasks/{id}
+- 削除：POST /tasks/{id}/delete
+- （任意）完了切替：POST /tasks/{id}/toggle
 
----
+## バリデーション（画面側）
+フォームDTO（TaskForm）で入力を受け取り、@Validated + BindingResult により入力チェックを行う。  
+エラー時は同一画面に戻し、th:errors でフィールド直下にメッセージを表示する。
 
-## 実行・確認手順（curl例）
+## 例外ハンドリング（画面側）
+存在しないIDアクセス時は TaskNotFoundException を @ControllerAdvice で捕捉し、templates/error/404.html を表示する。
 
-### アプリ起動
-.\gradlew.bat bootRun
+## スクリーンショット
+screenshots/ に以下を格納：
+- list_view.png（一覧画面）
+- form_error.png（バリデーションエラー表示）
+- after_create_flash.png（登録後フラッシュメッセージ表示）
 
-### API確認
-$base = "http://localhost:8080/api/tasks"
 
-GET:
-curl.exe -i $base
-
-POST:
-{"title":"買い物"}
-
-PUT:
-{"title":"買い物（更新）","completed":true}
-
-DELETE:
-curl.exe -i -X DELETE "$base/1"
-
----
-
-## 例外ハンドリングの動作例
-
-### 400 Bad Request（バリデーションエラー）
-{"title":""}
-
-レスポンス例：
-{"details":{"title":"タイトルを入力してください"},"error":"Validation failed"}
-
----
-
-### 404 Not Found（存在しないID）
-curl.exe -i -X DELETE "$base/9999"
-
-レスポンス例：
-{"error":"Task not found"}
-
----
-
-### 確認事項
-- CRUD が正常動作する
-- H2 にデータが永続化される
-- Validation エラー時に 400
-- 不正 ID 指定時に 404
-
-以上を確認済みである．
-'@ | Set-Content README.md -Encoding UTF8

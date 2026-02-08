@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="layout(content, title)">
+<head>
+  <meta charset="UTF-8" />
+  <title th:text="${title} ?: 'TaskApp'">TaskApp</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 24px; }
+    header { margin-bottom: 16px; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #ddd; padding: 8px; }
+    .actions form { display: inline; margin: 0 6px 0 0; }
+    .flash-success { padding: 10px; border: 1px solid #9ad; background: #eef; margin: 10px 0; }
+    .flash-error { padding: 10px; border: 1px solid #d99; background: #fee; margin: 10px 0; }
+    .field-error { color: #b00; font-size: 0.9em; }
+  </style>
+</head>
+<body>
+<header>
+  <h1><a th:href="@{/tasks}" style="text-decoration:none;color:inherit;">TaskApp</a></h1>
+</header>
+
+<div th:if="${success}" class="flash-success" th:text="${success}"></div>
+<div th:if="${error}" class="flash-error" th:text="${error}"></div>
+
+<div th:replace="${content}"></div>
+
+<footer style="margin-top:24px;font-size:0.9em;color:#666;">
+  <div>JavaTraining Week6</div>
+</footer>
+</body>
+</html>

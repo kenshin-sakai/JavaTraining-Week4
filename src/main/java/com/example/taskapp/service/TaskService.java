@@ -43,4 +43,12 @@ public class TaskService {
         Task task = findById(id);
         repo.delete(task);
     }
+    @Transactional
+    public Task toggleCompleted(Long id) {
+        Task task = findById(id);
+        task.setCompleted(!task.isCompleted());
+        return task;
+    }
+
 }
+
