@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head('Server Error')"></head>
+<body>
+  <div th:replace="layout :: header"></div>
+
+  <h2>500 Server Error</h2>
+  <p th:text="${message}">エラーが発生しました。</p>
+
+  <div th:replace="layout :: footer"></div>
+</body>
+</html>

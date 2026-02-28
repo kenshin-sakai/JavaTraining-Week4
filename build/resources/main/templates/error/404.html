@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(~{::section}, '404 Not Found')}">
+<section>
+  <h2>404 Not Found</h2>
+  <p th:if="${message}" th:text="${message}"></p>
+  <p>指定されたページは見つかりませんでした。</p>
+  <a th:href="@{/tasks}">一覧に戻る</a>
+</section>
+</html>

@@ -17,6 +17,10 @@
 <body>
 <header>
   <h1><a th:href="@{/tasks}" style="text-decoration:none;color:inherit;">TaskApp</a></h1>
+ <form th:action="@{/logout}" method="post" style="display:inline;">
+   <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+   <button type="submit">Logout</button>
+ </form>
 </header>
 
 <div th:if="${success}" class="flash-success" th:text="${success}"></div>
