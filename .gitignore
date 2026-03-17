@@ -9,3 +9,7 @@ build/
 # OS
 .DS_Store
 Thumbs.db
+
+data/
+*.mv.db
+*.trace.db
